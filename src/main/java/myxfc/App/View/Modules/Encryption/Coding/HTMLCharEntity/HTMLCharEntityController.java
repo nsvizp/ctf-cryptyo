@@ -1,0 +1,53 @@
+package myxfc.App.View.Modules.Encryption.Coding.HTMLCharEntity;
+
+import myxfc.Kit.Utils.ViewNode;
+import myxfc.Kit.Utils.ViewUtils;
+import myxfc.App.View.Viewobj.ViewController;
+import com.jfoenix.controls.JFXComboBox;
+import javafx.fxml.FXML;
+
+/**
+ * @author myxfc
+ */
+@ViewNode(name = "HTMLCharacterEntity",folderPath = "Root/Encryption/Coding/",fxmlName = "HTMLCharEntityView.fxml")
+public class HTMLCharEntityController extends ViewController {
+    @FXML private JFXComboBox JCB_reference;
+
+    @Override
+    protected void initialize(){
+        super.initialize();
+        initComboBoxReference();
+    }
+
+    @Override
+    public void ONClickEncode() {
+        super.ONClickEncode();
+        try {
+            JTA_dst.setText(HTMLCharEntityImpl.encode(JTA_src.getText(),JCB_reference.getValue().toString()));
+        }catch (Exception e){
+            e.printStackTrace();
+            ViewUtils.textAreaValidate(JTA_dst);
+        }
+    }
+
+    @Override
+    public void ONClickDecode() {
+        super.ONClickDecode();
+        try{
+            JTA_dst.setText(HTMLCharEntityImpl.decode(JTA_src.getText(),JCB_reference.getValue().toString()));
+        }catch (Exception e){
+            ViewUtils.textAreaValidate(JTA_dst);
+        }
+    }
+
+    public void initComboBoxReference(){
+        JCB_reference.getItems().addAll(
+                "CER: &[char];",
+                "NCR: &#[dec];",
+        "NCR: &#x[hex];"
+        );
+        JCB_reference.setValue("CER: &[char];");
+        JCB_reference.setVisibleRowCount(3);
+    }
+
+}

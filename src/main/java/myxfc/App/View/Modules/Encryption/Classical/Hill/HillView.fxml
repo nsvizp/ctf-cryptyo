@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane fx:id="ACP_backgroundAnchorPane" prefHeight="600.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="myxfc.App.View.Modules.Encryption.Classical.Hill.HillController">
+  <Label fx:id="JLB_title" alignment="CENTER" prefHeight="70.0" text="Hill" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0"><font><Font name="Arial" size="40.0"/></font></Label>
+  <AnchorPane fx:id="ACP_controllerAnchorPane" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="80.0">
+    <JFXTextArea fx:id="JTA_src" prefHeight="150.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="30.0"/>
+    <JFXTextArea fx:id="JTA_dst" editable="false" prefHeight="165.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="315.0"/>
+    <HBox alignment="CENTER" spacing="12.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="210.0">
+      <JFXTextField fx:id="JTF_matrix" prefWidth="280.0" text="3,3;2,5" promptText="3,3;2,5"/>
+      <JFXButton fx:id="JBT_enCode" buttonType="RAISED" onAction="#ONClickEncode" text="%Encrypt"/>
+      <JFXButton fx:id="JBT_deCode" buttonType="RAISED" onAction="#ONClickDecode" text="%Decrypt"/>
+    </HBox>
+  </AnchorPane>
+</AnchorPane>

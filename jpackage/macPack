@@ -1,0 +1,44 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+VERSION="${1:-1.14.1}"
+MVN="${MVN:-mvn}"
+JDK17_HOME="${JDK17_HOME:-$(/usr/libexec/java_home -v 17)}"
+export JAVA_HOME="$JDK17_HOME"
+export PATH="$JAVA_HOME/bin:$PATH"
+
+if [ "$(uname -m)" != "arm64" ]; then
+    echo "This script builds the Apple Silicon arm64 package." >&2
+    exit 1
+fi
+
+cd "$ROOT_DIR"
+"$MVN" clean package
+"$MVN" javafx:jlink
+rm -rf "$ROOT_DIR/target/myxfc.app" "$ROOT_DIR/target/myxfc-mac-arm64.zip"
+
+jpackage -n myxfc \
+    --app-version "$VERSION" \
+    -m "myxfc/myxfc.Main" \
+    --runtime-image "$ROOT_DIR/target/myxfc-runtime" \
+    --dest "$ROOT_DIR/target" \
+    --java-options "--add-opens=java.base/java.lang.reflect=com.jfoenix" \
+    --java-options "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix" \
+    --java-options "--add-exports=javafx.base/com.sun.javafx.binding=com.jfoenix" \
+    --java-options "--add-exports=javafx.base/com.sun.javafx.event=com.jfoenix" \
+    --java-options "--add-exports=javafx.graphics/com.sun.javafx.stage=com.jfoenix" \
+    --java-options "--add-exports=javafx.graphics/com.sun.javafx.scene=com.jfoenix" \
+    --java-options "--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix" \
+    --java-options "--add-exports=javafx.controls/com.sun.javafx.scene.control=com.jfoenix" \
+    --icon "$SCRIPT_DIR/ico/myxfc.icns" \
+    --type app-image \
+    --description "myxfc" \
+    --vendor "myxfc" \
+    --copyright "MIT License"
+
+cp "$ROOT_DIR/LICENSE" "$ROOT_DIR/target/myxfc.app/Contents/Resources/LICENSE"
+codesign --deep --force --sign - "$ROOT_DIR/target/myxfc.app"
+codesign --verify --deep --strict "$ROOT_DIR/target/myxfc.app"
+ditto -c -k --keepParent "$ROOT_DIR/target/myxfc.app" "$ROOT_DIR/target/myxfc-mac-arm64.zip"

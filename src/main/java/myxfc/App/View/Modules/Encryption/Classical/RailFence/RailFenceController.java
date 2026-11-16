@@ -1,0 +1,67 @@
+package myxfc.App.View.Modules.Encryption.Classical.RailFence;
+
+import com.jfoenix.controls.JFXComboBox;
+import myxfc.App.View.Viewobj.PopupSettingNode;
+import myxfc.App.View.Viewobj.PopupSettingView;
+import myxfc.Init.Init;
+import myxfc.Kit.Utils.ViewNode;
+import myxfc.Kit.Utils.ViewUtils;
+import myxfc.App.View.Viewobj.ViewController;
+import com.jfoenix.controls.JFXTextField;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+
+@ViewNode(name = "RailFence",folderPath = "Root/Encryption/Classical/",fxmlName = "RailFenceView.fxml")
+public class RailFenceController extends ViewController {
+
+    @FXML private JFXTextField JTF_quantity;
+    private JFXComboBox JCB_modeSelect;
+
+    @Override
+    protected void initialize() {
+        super.initialize();
+    }
+
+    @Override
+    public void ONClickEncode() {
+        super.ONClickEncode();
+        try{
+            if (JCB_modeSelect.getValue().equals(Init.getLanguage("RailFence"))) {
+                JTA_dst.setText(RailFenceImpl.encode(JTA_src.getText(),Integer.parseInt(JTF_quantity.getText())));
+            }else {
+                JTA_dst.setText(RailFenceImpl.encodeTypeW(JTA_src.getText(),Integer.parseInt(JTF_quantity.getText())));
+            }
+        }catch (Exception e){
+            ViewUtils.textAreaValidate(JTA_dst);
+        }
+    }
+
+    @Override
+    public void ONClickDecode() {
+        super.ONClickDecode();
+        try{
+            if (JCB_modeSelect.getValue().equals(Init.getLanguage("RailFence"))) {
+                JTA_dst.setText(RailFenceImpl.decode(JTA_src.getText(),Integer.parseInt(JTF_quantity.getText())));
+            }else {
+                JTA_dst.setText(RailFenceImpl.decodeTypeW(JTA_src.getText(),Integer.parseInt(JTF_quantity.getText())));
+            }
+        }catch (Exception e){
+            ViewUtils.textAreaValidate(JTA_dst);
+        }
+    }
+
+    @Override
+    protected void LoadPopupSettingNode() {
+        super.LoadPopupSettingNode();
+        ObservableList<String> options =
+                FXCollections.observableArrayList(
+                        Init.getLanguage("RailFence"),
+                        Init.getLanguage("RailFence(W)")
+                );
+        JCB_modeSelect = new JFXComboBox<>(options);
+        JCB_modeSelect.setValue(Init.getLanguage("RailFence"));
+        PopupSettingView popupSettingView = new PopupSettingView(ACP_controllerAnchorPane);
+        popupSettingView.setSetting(new PopupSettingNode(Init.getLanguage("OperateMode"), JCB_modeSelect,true));
+    }
+}

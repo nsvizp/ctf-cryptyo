@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane fx:id="ACP_backgroundAnchorPane" prefHeight="600.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="myxfc.App.View.Modules.Encryption.Modern.AsymmetricEncryption.RSA.RSAController">
+  <Label fx:id="JLB_title" alignment="CENTER" prefHeight="50.0" text="RSA" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0"><font><Font name="Arial" size="36.0"/></font></Label>
+  <AnchorPane fx:id="ACP_controllerAnchorPane" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="55.0">
+    <JFXTextArea fx:id="JTA_src" promptText="%Source" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="5.0" prefHeight="75.0"/>
+    <JFXTextArea fx:id="JTA_src1" promptText="%PublicKey" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="85.0" prefHeight="60.0"/>
+    <JFXTextArea fx:id="JTA_src2" promptText="%PrivateKey" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="150.0" prefHeight="60.0"/>
+    <HBox alignment="CENTER" spacing="8.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="218.0">
+      <JFXComboBox fx:id="JCB_keyMode" prefWidth="105.0"/>
+      <JFXComboBox fx:id="JCB_parameterRadix" prefWidth="90.0"/>
+      <JFXComboBox fx:id="JCB_padding" prefWidth="140.0"/>
+      <JFXComboBox fx:id="JCB_keySize" prefWidth="75.0"/>
+      <JFXButton buttonType="RAISED" onAction="#ONClickGenerate" text="%GenerateKey"/>
+    </HBox>
+    <HBox alignment="CENTER" spacing="8.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="260.0">
+      <JFXTextField fx:id="JTF_n" prefWidth="205.0" promptText="n"/>
+      <JFXTextField fx:id="JTF_e" prefWidth="150.0" promptText="e"/>
+      <JFXTextField fx:id="JTF_d" prefWidth="205.0" promptText="d"/>
+    </HBox>
+    <HBox alignment="CENTER" spacing="8.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="305.0">
+      <JFXComboBox fx:id="JCB_charset" prefWidth="85.0"/>
+      <JFXComboBox fx:id="JCB_inputFormat" prefWidth="90.0"/>
+      <JFXComboBox fx:id="JCB_outputFormat" prefWidth="90.0"/>
+      <JFXButton fx:id="JBT_enCode" buttonType="RAISED" onAction="#ONClickEncode" text="%Encrypt"/>
+      <JFXButton fx:id="JBT_deCode" buttonType="RAISED" onAction="#ONClickDecode" text="%Decrypt"/>
+    </HBox>
+    <JFXTextArea fx:id="JTA_dst" editable="false" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="355.0" AnchorPane.bottomAnchor="10.0"/>
+  </AnchorPane>
+</AnchorPane>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane prefHeight="625.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="myxfc.App.View.Root.RootViewController">
+  <BorderPane fx:id="borderPane" layoutY="7.0" onMousePressed="#checkView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <left>
+      <AnchorPane fx:id="treePane" prefHeight="600.0" prefWidth="270.0" BorderPane.alignment="CENTER">
+        <JFXTreeView fx:id="RootTree" layoutX="11.0" layoutY="26.0" onMousePressed="#checkView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+      </AnchorPane>
+    </left>
+    <center>
+      <AnchorPane fx:id="indexpane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <ImageView fx:id="IV_Logo" fitHeight="600.0" fitWidth="630.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+        <JFXButton fx:id="JBT_StyleChange" text="%DarkMode" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"/>
+      </AnchorPane>
+    </center>
+  </BorderPane>
+</AnchorPane>

@@ -1,0 +1,28 @@
+package myxfc.App.View.Modules.Tools.TextEdit.TextReplace;
+
+import myxfc.Kit.Utils.ViewNode;
+import myxfc.Kit.Utils.ViewUtils;
+import myxfc.App.View.Viewobj.ViewController;
+import com.jfoenix.controls.JFXTextArea;
+import javafx.fxml.FXML;
+
+@ViewNode(name = "TextReplace",folderPath = "Root/Tools/TextModify/",fxmlName = "TextReplaceView.fxml")
+public class TextReplaceController extends ViewController {
+    @FXML private JFXTextArea JTA_oldString;
+    @FXML private JFXTextArea JTA_newString;
+
+    @Override
+    protected void initialize() {
+        super.initialize();
+    }
+
+    @Override
+    public void ONClickConfirm() {
+        super.ONClickConfirm();
+        try {
+            JTA_dst.setText(TextReplaceImpl.TextReplace(JTA_src.getText(),JTA_oldString.getText(),JTA_newString.getText()));
+        }catch (Exception e){
+            ViewUtils.textAreaValidate(JTA_dst);
+        }
+    }
+}

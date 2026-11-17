@@ -93,6 +93,9 @@ public class MultiDecodeService {
         visited.add(input);
         int attempts = 0;
         while (!queue.isEmpty() && attempts++ < 300) {
+            if (Thread.currentThread().isInterrupted()) {
+                throw new java.util.concurrent.CancellationException("Decoding cancelled");
+            }
             Result current = queue.remove();
             results.add(current);
             if (current.steps().size() >= maxDepth) {
@@ -213,7 +216,7 @@ public class MultiDecodeService {
     }
 
     private static String decodeJwt(String value) {
-        java.util.regex.Matcher matcher = Pattern.compile("[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]*").matcher(value);
+        java.util.regex.Matcher matcher = Pattern.compile("(?<![A-Za-z0-9_-])eyJ[A-Za-z0-9_-]*\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]*").matcher(value);
         if (!matcher.find()) {
             return null;
         }

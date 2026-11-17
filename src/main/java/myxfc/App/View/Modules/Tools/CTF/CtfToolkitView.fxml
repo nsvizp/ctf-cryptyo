@@ -8,7 +8,7 @@
   <AnchorPane fx:id="ACP_controllerAnchorPane" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="80.0">
     <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <Tab text="Auto CTF"><AnchorPane>
-        <HBox spacing="10.0" layoutX="15.0" layoutY="12.0"><JFXButton onAction="#ONClickLoadAuto" text="Load Any File"/><JFXButton onAction="#ONClickAutoAnalyze" text="Auto Analyze"/></HBox>
+        <HBox spacing="10.0" layoutX="15.0" layoutY="12.0"><JFXButton onAction="#ONClickLoadAuto" text="Load Any File"/><JFXButton onAction="#ONClickAutoAnalyze" text="Auto Analyze"/><JFXButton onAction="#ONClickCancelAuto" text="Cancel"/></HBox>
         <JFXTextArea fx:id="JTA_autoOutput" editable="false" layoutX="15.0" layoutY="55.0" prefHeight="450.0" prefWidth="580.0" promptText="Automatic format detection, decoding and steganography results"/>
       </AnchorPane></Tab>
       <Tab text="Auto Decode"><AnchorPane>

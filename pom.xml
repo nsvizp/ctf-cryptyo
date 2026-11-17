@@ -6,7 +6,7 @@
 
     <groupId>org.myxfc</groupId>
     <artifactId>myxfc</artifactId>
-    <version>1.14.3</version>
+    <version>1.14.4</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>

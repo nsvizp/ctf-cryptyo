@@ -9,11 +9,11 @@ on:
       version:
         description: Application version
         required: true
-        default: 1.14.3
+        default: 1.14.4
       tag:
         description: Release tag
         required: true
-        default: v1.14.3
+        default: v1.14.4
 
 permissions:
   contents: write

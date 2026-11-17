@@ -59,7 +59,7 @@ mvn javafx:jlink
 macOS Apple Silicon 打包：
 
 ```bash
-MVN=mvn bash jpackage/macPack 1.14.3
+MVN=mvn bash jpackage/macPack 1.14.4
 ```
 
 打包脚本要求 arm64 JDK 17，可通过 `JDK17_HOME` 指定 JDK，通过 `MVN` 指定 Maven 可执行文件。

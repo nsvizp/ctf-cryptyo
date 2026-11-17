@@ -31,6 +31,7 @@ public class TrafficIntelligenceService {
         Set<String> tlsHosts = new LinkedHashSet<>();
         Set<String> iocs = new LinkedHashSet<>();
         for (var stream : streams) {
+            AutoAnalysisService.checkCancelled();
             stream.directions().forEach((direction, data) -> {
                 analyzeService(direction, data, tlsHosts, findings);
                 String text = new String(data, StandardCharsets.ISO_8859_1);
@@ -179,7 +180,7 @@ public class TrafficIntelligenceService {
         while (flag.find()) {
             iocs.add(flag.group());
         }
-        Matcher jwt = Pattern.compile("[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]*").matcher(text);
+        Matcher jwt = Pattern.compile("(?<![A-Za-z0-9_-])eyJ[A-Za-z0-9_-]*\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]*").matcher(text);
         while (jwt.find()) {
             try {
                 JwtAnalysisService.analyze(jwt.group());

@@ -79,8 +79,10 @@ public class LSBSteganography {
     }
 
     public static List<Detection> autoDetect(BufferedImage image, boolean r, boolean g, boolean b, boolean a) {
+        record Candidate(Settings settings, byte[] sampledData, double score, boolean framed, int capacity) {
+        }
         String[] orders = {"RGB", "BGR", "RGBA", "BGRA", "ARGB", "ABGR"};
-        List<Detection> detections = new ArrayList<>();
+        List<Candidate> candidates = new ArrayList<>();
         for (String order : orders) {
             List<Character> channels;
             try {
@@ -91,6 +93,9 @@ public class LSBSteganography {
             for (int plane = 0; plane < 8; plane++) {
                 for (boolean msb : new boolean[]{false, true}) {
                     for (boolean columns : new boolean[]{false, true}) {
+                        if (Thread.currentThread().isInterrupted()) {
+                            throw new java.util.concurrent.CancellationException("LSB detection cancelled");
+                        }
                         Settings settings = new Settings(channels, plane, msb, columns, order);
                         int sampleLength = (int) Math.min(4096, capacityBits(image, settings) / 8);
                         if (sampleLength < 8) {
@@ -102,14 +107,24 @@ public class LSBSteganography {
                         byte[] sampledData = framed ? extract(image, settings) : raw;
                         double score = score(sampledData, framed);
                         if (framed || score >= 60) {
-                            byte[] data = framed ? sampledData : readBytes(image, capacity, settings);
-                            detections.add(new Detection(settings, data, score, framed));
+                            candidates.add(new Candidate(settings, sampledData, score, framed, capacity));
                         }
                     }
                 }
             }
         }
-        detections.sort(Comparator.comparingDouble(Detection::score).reversed());
+        candidates.sort(Comparator.comparingDouble(Candidate::score).reversed());
+        List<Detection> detections = new ArrayList<>();
+        List<byte[]> uniqueSamples = new ArrayList<>();
+        for (Candidate candidate : candidates) {
+            if (uniqueSamples.stream().anyMatch(sample -> java.util.Arrays.equals(sample, candidate.sampledData()))) {
+                continue;
+            }
+            uniqueSamples.add(candidate.sampledData());
+            byte[] data = candidate.framed() ? candidate.sampledData()
+                    : readBytes(image, candidate.capacity(), candidate.settings());
+            detections.add(new Detection(candidate.settings(), data, candidate.score(), candidate.framed()));
+        }
         return List.copyOf(detections);
     }
 

@@ -59,6 +59,9 @@ public class CtfToolkitController extends ViewController {
 
     private File autoFile;
     private List<File> autoFiles = List.of();
+    private volatile boolean autoRunning;
+    private java.util.concurrent.ExecutorService autoExecutor;
+    private Thread autoWorker;
     private File zipFile;
     private File wavFile;
     private File pcapFile;
@@ -104,26 +107,95 @@ public class CtfToolkitController extends ViewController {
     }
 
     @FXML public void ONClickAutoAnalyze() {
+        if (autoRunning) {
+            JTA_autoOutput.setText("Analysis is already running");
+            return;
+        }
         if (autoFiles.isEmpty()) {
             JTA_autoOutput.setText("Load one or more files first");
             return;
         }
-        JTA_autoOutput.setText("Analyzing " + autoFiles.size() + " file(s)...");
+        autoRunning = true;
         List<Path> paths = autoFiles.stream().map(File::toPath).toList();
-        new Thread(() -> {
-            var reports = myxfc.App.View.Modules.Tools.CTF.Engine.Analysis.AutoAnalysisService.analyzeAll(paths);
-            StringBuilder output = new StringBuilder();
-            for (var report : reports) {
-                output.append("########## ").append(report.path()).append(" ##########\n");
-                if (report.error() != null) {
-                    output.append("Analysis error: ").append(report.error()).append("\n\n");
-                } else {
-                    output.append(myxfc.App.View.Modules.Tools.CTF.Engine.Analysis.AnalysisReportFormatter
-                            .format(report.findings())).append("\n\n");
+        JTA_autoOutput.setText("Analyzing " + paths.size() + " file(s), 0/" + paths.size() + " completed...");
+        autoExecutor = java.util.concurrent.Executors.newFixedThreadPool(2);
+        java.util.concurrent.CompletionService<myxfc.App.View.Modules.Tools.CTF.Engine.Analysis.AutoAnalysisService.FileAnalysis> completion =
+                new java.util.concurrent.ExecutorCompletionService<>(autoExecutor);
+        for (Path path : paths) {
+            completion.submit(() -> {
+                try {
+                    return new myxfc.App.View.Modules.Tools.CTF.Engine.Analysis.AutoAnalysisService.FileAnalysis(
+                            path, myxfc.App.View.Modules.Tools.CTF.Engine.Analysis.AutoAnalysisService.analyze(path), null);
+                } catch (java.util.concurrent.CancellationException e) {
+                    throw e;
+                } catch (Exception e) {
+                    String error = e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
+                    return new myxfc.App.View.Modules.Tools.CTF.Engine.Analysis.AutoAnalysisService.FileAnalysis(
+                            path, List.of(), error);
+                }
+            });
+        }
+        autoWorker = new Thread(() -> processAutoReports(paths.size(), completion), "myxfc-auto-reports");
+        autoWorker.setDaemon(true);
+        autoWorker.start();
+    }
+
+    @FXML public void ONClickCancelAuto() {
+        if (!autoRunning) {
+            JTA_autoOutput.setText("No automatic analysis is running");
+            return;
+        }
+        JTA_autoOutput.setText("Cancelling analysis...");
+        autoExecutor.shutdownNow();
+        autoWorker.interrupt();
+    }
+
+    private void processAutoReports(int total,
+                                    java.util.concurrent.CompletionService<myxfc.App.View.Modules.Tools.CTF.Engine.Analysis.AutoAnalysisService.FileAnalysis> completion) {
+        final int displayLimit = 1_000_000;
+        StringBuilder display = new StringBuilder();
+        Path reportPath = null;
+        try {
+            reportPath = Files.createTempFile("myxfc-auto-report-", ".txt");
+            try (java.io.BufferedWriter writer = Files.newBufferedWriter(reportPath, StandardCharsets.UTF_8)) {
+                for (int completed = 0; completed < total; completed++) {
+                    var report = completion.take().get();
+                    StringBuilder section = new StringBuilder("########## ").append(report.path()).append(" ##########\n");
+                    if (report.error() != null) {
+                        section.append("Analysis error: ").append(report.error()).append("\n\n");
+                    } else {
+                        section.append(myxfc.App.View.Modules.Tools.CTF.Engine.Analysis.AnalysisReportFormatter
+                                .format(report.findings())).append("\n\n");
+                    }
+                    writer.write(section.toString());
+                    int remaining = displayLimit - display.length();
+                    if (remaining > 0) {
+                        display.append(section, 0, Math.min(remaining, section.length()));
+                    }
+                    int finished = completed + 1;
+                    Platform.runLater(() -> JTA_autoOutput.setText("Analyzing " + total + " file(s), "
+                            + finished + "/" + total + " completed...\nLast: " + report.path()));
                 }
             }
-            Platform.runLater(() -> JTA_autoOutput.setText(output.toString()));
-        }).start();
+            boolean large = Files.size(reportPath) > displayLimit;
+            String finalText = display.toString();
+            if (large) {
+                finalText += "\n\nLarge report: the complete result is saved at " + reportPath;
+            } else {
+                Files.deleteIfExists(reportPath);
+            }
+            String output = finalText;
+            Platform.runLater(() -> JTA_autoOutput.setText(output));
+        } catch (InterruptedException | java.util.concurrent.CancellationException e) {
+            Thread.currentThread().interrupt();
+            String partial = reportPath == null ? "" : "\nPartial report: " + reportPath;
+            Platform.runLater(() -> JTA_autoOutput.setText("Analysis cancelled." + partial));
+        } catch (Exception e) {
+            Platform.runLater(() -> showError(JTA_autoOutput, e));
+        } finally {
+            autoExecutor.shutdownNow();
+            autoRunning = false;
+        }
     }
 
     @FXML public void ONClickIdentify() {

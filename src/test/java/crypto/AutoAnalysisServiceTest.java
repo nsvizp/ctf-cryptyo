@@ -66,6 +66,17 @@ class AutoAnalysisServiceTest {
     }
 
     @Test
+    void automaticAnalysisCanBeCancelled() {
+        Thread.currentThread().interrupt();
+        try {
+            org.junit.jupiter.api.Assertions.assertThrows(java.util.concurrent.CancellationException.class,
+                    () -> AutoAnalysisService.analyze(temp.resolve("cancelled.bin")));
+        } finally {
+            Thread.interrupted();
+        }
+    }
+
+    @Test
     void dtmfCandidatesIncludeCommonEncodings() {
         var candidates = DtmfDecodeService.decodeCandidates("666C6167");
         assertTrue(candidates.stream().anyMatch(candidate -> candidate.text().equals("flag")));

@@ -34,11 +34,20 @@ public class AutoAnalysisService {
     public record FileAnalysis(Path path, List<Finding> findings, String error) {
     }
 
+    public static void checkCancelled() {
+        if (Thread.currentThread().isInterrupted()) {
+            throw new java.util.concurrent.CancellationException("Analysis cancelled");
+        }
+    }
+
     public static List<FileAnalysis> analyzeAll(List<Path> paths) {
         List<FileAnalysis> reports = new ArrayList<>();
         for (Path path : paths) {
+            checkCancelled();
             try {
                 reports.add(new FileAnalysis(path, analyze(path), null));
+            } catch (java.util.concurrent.CancellationException e) {
+                throw e;
             } catch (Exception e) {
                 String error = e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
                 reports.add(new FileAnalysis(path, List.of(), error));
@@ -48,7 +57,9 @@ public class AutoAnalysisService {
     }
 
     public static List<Finding> analyze(Path path) throws Exception {
+        checkCancelled();
         byte[] bytes = Files.readAllBytes(path);
+        checkCancelled();
         List<Finding> findings = new ArrayList<>();
         if (matches(bytes, "RIFF") && matches(bytes, 8, "WAVE")) {
             analyzeWav(path, findings);
@@ -152,12 +163,15 @@ public class AutoAnalysisService {
         }
         add(findings, "ZIP", "Entries", summary.toString(), 20);
         for (var entry : entries) {
+            checkCancelled();
             if (entry.size() > 2_000_000 || entry.encrypted() || entry.name().endsWith("/")) {
                 continue;
             }
             try {
                 byte[] data = ZipAnalysisService.readEntry(path, entry.name());
                 analyzeText(data, "ZIP " + entry.name(), findings);
+            } catch (java.util.concurrent.CancellationException e) {
+                throw e;
             } catch (Exception ignored) {
             }
         }
@@ -166,6 +180,7 @@ public class AutoAnalysisService {
                 || entries.stream().anyMatch(entry -> entry.name().startsWith("xl/")))) {
             add(findings, "Office", "Metadata and hidden content", OfficeAnalysisService.inspect(path), 40);
             for (var entry : OfficeAnalysisService.embedded(path)) {
+                checkCancelled();
                 analyzeText(entry.data(), "Office " + entry.name(), findings);
             }
         }
@@ -179,15 +194,18 @@ public class AutoAnalysisService {
         findings.addAll(smartReport.findings());
         var streams = PcapAnalysisService.tcpStreams(capture);
         for (var stream : streams) {
+            checkCancelled();
             stream.directions().forEach((direction, data) -> analyzeText(data, "TCP " + direction, findings));
         }
         for (var object : PcapAnalysisService.httpObjects(streams)) {
+            checkCancelled();
             add(findings, "HTTP", object.method() + " " + object.uri(), object.status() + " " + object.contentType(), 30);
             analyzeText(object.body(), "HTTP " + object.uri(), findings);
         }
     }
 
     private static void analyzeText(byte[] data, String source, List<Finding> findings) {
+        checkCancelled();
         if (data == null || data.length == 0 || data.length > 2_000_000) {
             return;
         }

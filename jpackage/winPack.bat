@@ -3,6 +3,7 @@ setlocal
 set ROOT_DIR=%~dp0..
 set VERSION=%~1
 if "%VERSION%"=="" set VERSION=1.14.4
+if /i "%VERSION:~0,1%"=="v" set "VERSION=%VERSION:~1%"
 if "%MVN%"=="" set MVN=mvn
 cd /d %ROOT_DIR%
 call %MVN% clean package || exit /b 1

@@ -4,6 +4,19 @@ on:
   push:
     tags:
       - "**"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Application version
+        required: true
+        default: 1.14.2
+      tag:
+        description: Release tag
+        required: true
+        default: v1.14.2
+
+permissions:
+  contents: write
 
 jobs:
   win-build:
@@ -18,14 +31,14 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build Windows package
-        run: .\jpackage\winPack.bat ${{ github.ref_name }}
+        run: .\jpackage\winPack.bat ${{ inputs.version || github.ref_name }}
       - id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ inputs.tag || github.ref }}
+          release_name: Release ${{ inputs.tag || github.ref_name }}
           draft: false
           prerelease: false
       - uses: actions/upload-release-asset@v1
@@ -48,7 +61,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build Linux package
-        run: MVN=mvn bash jpackage/linuxPack ${{ github.ref_name }}
+        run: MVN=mvn bash jpackage/linuxPack ${{ inputs.version || github.ref_name }}
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -69,7 +82,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build macOS package
-        run: MVN=mvn bash jpackage/macPack ${{ github.ref_name }}
+        run: MVN=mvn bash jpackage/macPack ${{ inputs.version || github.ref_name }}
       - uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -12,6 +12,8 @@ myxfc 是一个基于 JDK 17、JavaFX 和 JFoenix 的 CTF 加解密与编码工�
 - 古典密码：凯撒、ROT、栅栏及 W 型栅栏、Atbash、Vigenere、仿射、培根、Playfair、Hill。
 - 编码：Base16/32/58/62/64/85/91/92、自定义 Base16/32/64 字母表、URL、ASCII、HEX、Unicode、HTML 实体、摩斯电码、Brainfuck。
 - XOR：标准循环密钥 XOR、Text/HEX/Base64 输入输出、单字节密钥爆破与候选排序。
+- CTF 综合工具：任意文件一键自动分析、多层编码/JWT/Base/URL 自动解码、XOR/RC4/SM4/AES/DES 密钥候选分析、ZIP/Office/PDF 结构及嵌入对象提取、PDF/Office 加密与损坏诊断修复、binwalk 接口、WAV LSB/频谱/自动 DTMF、PCAP/PCAPNG 流重组与 HTTP 对象导出、流量协议/DNS/TCP/SQLi/XSS/LFI/RCE/认证异常分析、RSA 常见攻击、维吉尼亚及重复密钥 XOR 自动破解。
+- 图片隐写：LSB、调色板、像素值映射、可逆 Haar DWT、RGBA/位平面分析、图像差分/XOR/叠加、EXIF、PNG Chunk、尾部数据提取、文件雕刻、FFT/DCT/直方图分析，以及 steghide/OutGuess 外部工具接口。
 - 其他工具：二维码、像素置换、文本处理、时间戳、文件头检测及红队辅助工具。
 
 ## 构建

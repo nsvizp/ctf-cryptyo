@@ -12,6 +12,8 @@ myxfc is a CTF cryptography and encoding toolkit built with JDK 17, JavaFX and J
 - Classical cryptography: Caesar, ROT, Rail Fence and W Rail Fence, Atbash, Vigenere, Affine, Bacon, Playfair and Hill.
 - Encodings: Base16/32/58/62/64/85/91/92, custom Base16/32/64 alphabets, URL, ASCII, HEX, Unicode, HTML entities, Morse and Brainfuck.
 - XOR: standard repeating-key XOR, Text/HEX/Base64 formats, single-byte brute force and ranked candidates.
+- CTF toolkit: one-click automatic file analysis, nested encoding/JWT/Base/URL auto-decoding, XOR/RC4/SM4/AES/DES key-candidate analysis, ZIP/Office/PDF inspection and embedded-object extraction, PDF/Office encryption and corruption diagnosis/repair, binwalk integration, WAV LSB/spectrum/automatic DTMF decoding, PCAP/PCAPNG stream reassembly and HTTP object export, protocol/DNS/TCP/SQLi/XSS/LFI/RCE/authentication anomaly analysis, RSA attacks, Vigenere and repeating-key XOR cracking.
+- Image steganography: LSB, palette, pixel-value mapping, reversible Haar DWT, RGBA/bit-plane analysis, image difference/XOR/overlay, EXIF, PNG chunks, trailing-data extraction, file carving, FFT/DCT/histograms, and steghide/OutGuess integration.
 - Additional utilities: QR codes, pixel replacement, text editing, timestamps, file-header checks and red-team helpers.
 
 ## Build

@@ -54,10 +54,42 @@ class NewViewsTest {
                 "/myxfc/App/View/Modules/Encryption/Coding/XOR/XORView.fxml",
                 "/myxfc/App/View/Modules/Encryption/Modern/Hash/HashView.fxml",
                 "/myxfc/App/View/Modules/Encryption/Coding/BaseEncoding/Base64/Base64View.fxml",
-                "/myxfc/App/View/Modules/Encryption/Modern/SymmetricEncryption/BlockCipher/BlockCipherView.fxml"
+                "/myxfc/App/View/Modules/Encryption/Modern/SymmetricEncryption/BlockCipher/BlockCipherView.fxml",
+                "/myxfc/App/View/Modules/Tools/Image/Steganography/SteganographyView.fxml",
+                "/myxfc/App/View/Modules/Tools/CTF/CtfToolkitView.fxml"
         };
         for (String view : views) {
             assertNotNull(load(view), view);
+        }
+    }
+
+    @Test
+    void steganographyViewUsesOriginalTitleAndTheme() throws Exception {
+        FXMLLoader loader = loadLoader("/myxfc/App/View/Modules/Tools/Image/Steganography/SteganographyView.fxml");
+        Parent root = loader.getRoot();
+        javafx.scene.Scene scene = runFx(() -> {
+            javafx.scene.Scene value = new javafx.scene.Scene(root, 630, 600);
+            value.getStylesheets().add(NewViewsTest.class.getResource("/css/MainCSS_dark.css").toExternalForm());
+            root.applyCss();
+            root.layout();
+            return value;
+        });
+        javafx.scene.control.Label title = (javafx.scene.control.Label) root.lookup("#JLB_title");
+        assertEquals(70, title.getPrefHeight());
+        assertEquals(45, title.getFont().getSize());
+        assertEquals(80, javafx.scene.layout.AnchorPane.getTopAnchor(
+                (javafx.scene.layout.AnchorPane) root.lookup("#ACP_controllerAnchorPane")));
+
+        if (Boolean.getBoolean("myxfc.captureUi")) {
+            javafx.scene.image.WritableImage snapshot = runFx(() -> scene.snapshot(null));
+            java.awt.image.BufferedImage image = new java.awt.image.BufferedImage(
+                    (int) snapshot.getWidth(), (int) snapshot.getHeight(), java.awt.image.BufferedImage.TYPE_INT_ARGB);
+            for (int y = 0; y < image.getHeight(); y++) {
+                for (int x = 0; x < image.getWidth(); x++) {
+                    image.setRGB(x, y, snapshot.getPixelReader().getArgb(x, y));
+                }
+            }
+            javax.imageio.ImageIO.write(image, "png", new java.io.File("/tmp/myxfc-stego-ui.png"));
         }
     }
 

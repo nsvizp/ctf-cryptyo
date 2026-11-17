@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane fx:id="ACP_backgroundAnchorPane" prefHeight="600.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="myxfc.App.View.Modules.Tools.Image.Steganography.SteganographyController">
+  <Label fx:id="JLB_title" alignment="CENTER" layoutX="24.0" layoutY="38.0" prefHeight="70.0" prefWidth="610.0" text="Image Steganography" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0"/>
+  <AnchorPane fx:id="ACP_controllerAnchorPane" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="80.0">
+    <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Tab text="LSB / Stego">
+        <AnchorPane>
+          <HBox spacing="7.0" layoutX="10.0" layoutY="7.0">
+            <JFXButton onAction="#ONClickLoadCover" text="Load Image"/>
+            <JFXButton onAction="#ONClickSaveStegoImage" text="Save PNG"/>
+            <JFXComboBox fx:id="JCB_stegoMode" prefWidth="120.0"/>
+            <JFXComboBox fx:id="JCB_payloadType" prefWidth="85.0"/>
+            <JFXButton onAction="#ONClickChoosePayload" text="Payload File"/>
+          </HBox>
+          <ImageView fx:id="IV_cover" fitHeight="150.0" fitWidth="180.0" preserveRatio="true" layoutX="15.0" layoutY="45.0"/>
+          <JFXTextArea fx:id="JTA_payload" layoutX="210.0" layoutY="45.0" prefHeight="150.0" prefWidth="390.0" promptText="Text or HEX payload"/>
+          <HBox spacing="7.0" layoutX="12.0" layoutY="205.0">
+            <JFXComboBox fx:id="JCB_channelOrder" prefWidth="85.0"/>
+            <JFXCheckBox fx:id="JCB_R" text="R"/>
+            <JFXCheckBox fx:id="JCB_G" text="G"/>
+            <JFXCheckBox fx:id="JCB_B" text="B"/>
+            <JFXCheckBox fx:id="JCB_A" text="A"/>
+            <JFXComboBox fx:id="JCB_bitPlane" prefWidth="65.0"/>
+            <JFXComboBox fx:id="JCB_bitOrder" prefWidth="75.0"/>
+            <JFXComboBox fx:id="JCB_scan" prefWidth="90.0"/>
+          </HBox>
+          <HBox spacing="7.0" layoutX="12.0" layoutY="242.0">
+            <JFXCheckBox fx:id="JCB_rawMode" text="Raw extract"/>
+            <JFXTextField fx:id="JTF_rawLength" prefWidth="110.0" promptText="Bytes"/>
+            <JFXButton onAction="#ONClickEmbed" text="Embed"/>
+            <JFXButton onAction="#ONClickExtract" text="Extract"/>
+            <JFXButton onAction="#ONClickAutoDetect" text="Auto Detect"/>
+            <JFXButton onAction="#ONClickSavePayload" text="Save Data"/>
+          </HBox>
+          <JFXTextArea fx:id="JTA_output" editable="false" layoutX="12.0" layoutY="285.0" prefHeight="225.0" prefWidth="595.0"/>
+        </AnchorPane>
+      </Tab>
+      <Tab text="Bit Planes / Analysis">
+        <AnchorPane>
+          <HBox spacing="8.0" layoutX="12.0" layoutY="7.0">
+            <JFXButton onAction="#ONClickLoadAnalysis" text="Load A"/>
+            <JFXButton onAction="#ONClickLoadCompare" text="Load B"/>
+            <JFXButton onAction="#ONClickSaveAnalysis" text="Save Result"/>
+          </HBox>
+          <ImageView fx:id="IV_analysis" fitHeight="205.0" fitWidth="270.0" preserveRatio="true" layoutX="15.0" layoutY="45.0"/>
+          <ImageView fx:id="IV_analysisResult" fitHeight="205.0" fitWidth="270.0" preserveRatio="true" layoutX="315.0" layoutY="45.0"/>
+          <HBox spacing="8.0" layoutX="12.0" layoutY="260.0">
+            <JFXComboBox fx:id="JCB_imageOperation" prefWidth="135.0"/>
+            <JFXComboBox fx:id="JCB_analysisChannel" prefWidth="65.0"/>
+            <JFXComboBox fx:id="JCB_analysisPlane" prefWidth="65.0"/>
+            <JFXTextField fx:id="JTF_param1" prefWidth="95.0" promptText="P1"/>
+            <JFXTextField fx:id="JTF_param2" prefWidth="95.0" promptText="P2"/>
+            <JFXButton onAction="#ONClickApplyAnalysis" text="Apply"/>
+          </HBox>
+          <JFXTextArea fx:id="JTA_analysisOutput" editable="false" layoutX="12.0" layoutY="305.0" prefHeight="205.0" prefWidth="595.0"/>
+        </AnchorPane>
+      </Tab>
+      <Tab text="File Structure">
+        <AnchorPane>
+          <HBox spacing="8.0" layoutX="12.0" layoutY="10.0">
+            <JFXButton onAction="#ONClickLoadStructure" text="Load File"/>
+            <JFXButton onAction="#ONClickMetadata" text="Metadata / EXIF"/>
+            <JFXButton onAction="#ONClickPngChunks" text="PNG Chunks"/>
+            <JFXButton onAction="#ONClickTrailing" text="Trailing Data"/>
+            <JFXButton onAction="#ONClickCarve" text="Carve Files"/>
+            <JFXButton onAction="#ONClickSaveStructureData" text="Save Data"/>
+          </HBox>
+          <JFXTextArea fx:id="JTA_structureOutput" editable="false" layoutX="12.0" layoutY="55.0" prefHeight="455.0" prefWidth="595.0"/>
+        </AnchorPane>
+      </Tab>
+      <Tab text="steghide / OutGuess">
+        <AnchorPane>
+          <HBox spacing="8.0" layoutX="12.0" layoutY="10.0">
+            <JFXButton onAction="#ONClickExternalInput" text="Input"/>
+            <JFXButton onAction="#ONClickExternalPayload" text="Payload"/>
+            <JFXTextField fx:id="JTF_externalPassword" prefWidth="180.0" promptText="Passphrase"/>
+            <JFXButton onAction="#ONClickExternalStatus" text="Tool Status"/>
+          </HBox>
+          <HBox spacing="7.0" layoutX="12.0" layoutY="48.0">
+            <JFXButton onAction="#ONClickSteghideEmbed" text="steghide Embed"/>
+            <JFXButton onAction="#ONClickSteghideExtract" text="Extract"/>
+            <JFXButton onAction="#ONClickOutguessEmbed" text="OutGuess Embed"/>
+            <JFXButton onAction="#ONClickOutguessExtract" text="Extract"/>
+          </HBox>
+          <JFXTextArea fx:id="JTA_externalOutput" editable="false" layoutX="12.0" layoutY="90.0" prefHeight="420.0" prefWidth="595.0"/>
+        </AnchorPane>
+      </Tab>
+    </TabPane>
+  </AnchorPane>
+</AnchorPane>

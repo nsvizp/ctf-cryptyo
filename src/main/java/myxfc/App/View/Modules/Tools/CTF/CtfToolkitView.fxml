@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane fx:id="ACP_backgroundAnchorPane" prefHeight="600.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="myxfc.App.View.Modules.Tools.CTF.CtfToolkitController">
+  <Label fx:id="JLB_title" alignment="CENTER" layoutX="24.0" layoutY="38.0" prefHeight="70.0" prefWidth="610.0" text="CTF Toolkit" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0"/>
+  <AnchorPane fx:id="ACP_controllerAnchorPane" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="80.0">
+    <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Tab text="Auto CTF"><AnchorPane>
+        <HBox spacing="10.0" layoutX="15.0" layoutY="12.0"><JFXButton onAction="#ONClickLoadAuto" text="Load Any File"/><JFXButton onAction="#ONClickAutoAnalyze" text="Auto Analyze"/></HBox>
+        <JFXTextArea fx:id="JTA_autoOutput" editable="false" layoutX="15.0" layoutY="55.0" prefHeight="450.0" prefWidth="580.0" promptText="Automatic format detection, decoding and steganography results"/>
+      </AnchorPane></Tab>
+      <Tab text="Auto Decode"><AnchorPane>
+        <JFXTextArea fx:id="JTA_decodeInput" promptText="Encoded text" layoutX="15.0" layoutY="15.0" prefHeight="155.0" prefWidth="580.0"/>
+        <HBox spacing="7.0" layoutX="15.0" layoutY="185.0"><JFXComboBox fx:id="JCB_decodeDepth" prefWidth="65.0"/><JFXTextField fx:id="JTF_decodeKey" prefWidth="125.0" promptText="Key (optional)"/><JFXTextField fx:id="JTF_decodeIv" prefWidth="105.0" promptText="IV (optional)"/><JFXButton onAction="#ONClickIdentify" text="Identify"/><JFXButton onAction="#ONClickMultiDecode" text="Auto Decode"/><JFXButton onAction="#ONClickCryptoDecode" text="Crypto"/></HBox>
+        <JFXTextArea fx:id="JTA_decodeOutput" editable="false" layoutX="15.0" layoutY="230.0" prefHeight="270.0" prefWidth="580.0"/>
+      </AnchorPane></Tab>
+      <Tab text="ZIP / binwalk"><AnchorPane>
+        <HBox spacing="8.0" layoutX="12.0" layoutY="12.0"><JFXButton onAction="#ONClickLoadZip" text="Load ZIP / File"/><JFXButton onAction="#ONClickInspectZip" text="Inspect"/><JFXButton onAction="#ONClickExtractZip" text="Extract All"/><JFXButton onAction="#ONClickZipTrailing" text="Trailing"/><JFXButton onAction="#ONClickBinwalk" text="binwalk"/></HBox>
+        <JFXTextArea fx:id="JTA_zipOutput" editable="false" layoutX="15.0" layoutY="55.0" prefHeight="450.0" prefWidth="580.0"/>
+      </AnchorPane></Tab>
+      <Tab text="Audio"><AnchorPane>
+        <HBox spacing="8.0" layoutX="12.0" layoutY="10.0"><JFXButton onAction="#ONClickLoadWav" text="Load WAV"/><JFXComboBox fx:id="JCB_wavChannel" prefWidth="100.0"/><JFXButton onAction="#ONClickWavMetadata" text="Metadata"/><JFXButton onAction="#ONClickWaveform" text="Waveform"/><JFXButton onAction="#ONClickSpectrum" text="Spectrum"/><JFXButton onAction="#ONClickDtmf" text="Auto DTMF"/></HBox>
+        <ImageView fx:id="IV_audio" fitHeight="155.0" fitWidth="570.0" preserveRatio="true" layoutX="18.0" layoutY="50.0"/>
+        <JFXTextArea fx:id="JTA_audioPayload" promptText="Text payload or extracted data" layoutX="15.0" layoutY="215.0" prefHeight="90.0" prefWidth="580.0"/>
+        <HBox spacing="8.0" layoutX="15.0" layoutY="315.0"><JFXButton onAction="#ONClickWavEmbed" text="LSB Embed"/><JFXButton onAction="#ONClickWavExtract" text="Extract"/><JFXButton onAction="#ONClickSaveWav" text="Save WAV"/><JFXButton onAction="#ONClickSaveAudioData" text="Save Data"/></HBox>
+        <JFXTextArea fx:id="JTA_audioOutput" editable="false" layoutX="15.0" layoutY="360.0" prefHeight="145.0" prefWidth="580.0"/>
+      </AnchorPane></Tab>
+      <Tab text="PCAP"><AnchorPane>
+        <HBox spacing="8.0" layoutX="12.0" layoutY="12.0"><JFXButton onAction="#ONClickLoadPcap" text="Load Capture"/><JFXButton onAction="#ONClickPcapStreams" text="TCP / UDP"/><JFXButton onAction="#ONClickHttpObjects" text="HTTP Objects"/><JFXButton onAction="#ONClickPcapAnomalies" text="Anomalies"/><JFXButton onAction="#ONClickExportHttp" text="Export HTTP"/></HBox>
+        <JFXTextArea fx:id="JTA_pcapOutput" editable="false" layoutX="15.0" layoutY="55.0" prefHeight="450.0" prefWidth="580.0"/>
+      </AnchorPane></Tab>
+      <Tab text="Crypto Attacks"><AnchorPane>
+        <JFXTextArea fx:id="JTA_cryptoInput" promptText="n=..., e=..., d=... or ciphertext" layoutX="15.0" layoutY="12.0" prefHeight="150.0" prefWidth="580.0"/>
+        <HBox spacing="8.0" layoutX="15.0" layoutY="175.0"><JFXComboBox fx:id="JCB_attackMode" prefWidth="230.0"/><JFXComboBox fx:id="JCB_attackKeyLength" prefWidth="100.0"/><JFXButton onAction="#ONClickRunAttack" text="Run Attack"/></HBox>
+        <JFXTextArea fx:id="JTA_cryptoOutput" editable="false" layoutX="15.0" layoutY="220.0" prefHeight="285.0" prefWidth="580.0"/>
+      </AnchorPane></Tab>
+      <Tab text="PDF / Office"><AnchorPane>
+        <HBox spacing="8.0" layoutX="12.0" layoutY="12.0"><JFXButton onAction="#ONClickLoadDocument" text="Load Document"/><JFXButton onAction="#ONClickInspectDocument" text="Inspect"/><JFXButton onAction="#ONClickExtractDocument" text="Extract"/><JFXButton onAction="#ONClickRepairDocument" text="Repair"/><JFXButton onAction="#ONClickDecryptDocument" text="Empty Password"/></HBox>
+        <JFXTextArea fx:id="JTA_documentOutput" editable="false" layoutX="15.0" layoutY="55.0" prefHeight="450.0" prefWidth="580.0"/>
+      </AnchorPane></Tab>
+    </TabPane>
+  </AnchorPane>
+</AnchorPane>
